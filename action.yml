@@ -1,0 +1,32 @@
+name: 'Run BackstopJS'
+description: 'Run BackstopJS visual regression test.'
+author: 'xendk'
+inputs:
+  action:
+    description: 'Action to perform, `reference` or `test` (default)'
+    required: true
+    default: test
+  backstore_key:
+    description: 'Key for pushing to backstore'
+    required: true
+  github_token:
+    description: 'Github token for posting status to pull request'
+    required: true
+  # Github apparently doesn't support the `github` context in run.args.
+  sha:
+    description: 'Commit SHA'
+    default: ${{ github.event.pull_request.head.sha }}
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  env:
+    GITHUB_TOKEN: ${{ inputs.github_token }}
+    BACKSTORE_KEY: ${{ inputs.backstore_key }}
+    HEAD_SHA: ${{ inputs.sha }}
+  args:
+    - ${{ inputs.action }}
+
+branding:
+  icon: 'eye'
+  color: 'purple'
