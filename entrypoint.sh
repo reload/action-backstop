@@ -17,7 +17,7 @@ if [ "$1" == "test" ]; then
     HTML_REPORT=$(jq -r .paths.html_report backstop.json)
     SHA=$(echo $GITHUB_REPOSITORY:$HEAD_SHA | sha1sum - | cut -d" " -f 1)
 
-    rsync -e 'ssh -i /tmp/key -p 1984 -o StrictHostKeyChecking=no' -r ${REFERENCE_IMAGES} ${TEST_IMAGES} ${HTML_REPORT} store@backstore.reload.dk:${SHA}/
+    rsync -e 'ssh -i /tmp/key -p 1984 -o StrictHostKeyChecking=no' -r ${REFERENCE_IMAGES} ${TEST_IMAGES} ${HTML_REPORT} store@backstore.reload.dk:backstore/${SHA}/
 
     BACKSTORE_URL=https://backstore.reload.dk/${SHA}/$(basename $HTML_REPORT)
 
