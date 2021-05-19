@@ -13,8 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-      with:
-        fetch-depth: '0'
+    - name: Bump version and push tag
+      uses: anothrNick/github-tag-action@master
+      id: version
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WITH_V: true
+        DEFAULT_BUMP: patch
     - name: Set up Docker Buildx
       id: buildx
       uses: docker/setup-buildx-action@master
@@ -32,6 +37,14 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         builder: ${{ steps.buildx.outputs.name }}
-        tags: |
-          ghcr.io/reload/${{ github.repository}}:latest
         push: true
+        labels: |
+          org.opencontainers.image.source=https://github.com/${{ github.repository }}
+          org.opencontainers.image.version=${{ steps.version.outputs.tag }}
+          org.opencontainers.image.revision=${{ github.sha }}
+        # Currently we only have the main branch, so just hardcode
+        # that tag. If we create a `v1` branch, we need to get the
+        # branch name and update `branches` at the top of this file.
+        tags: |
+          ghcr.io/${{ github.repository }}:main
+          ghcr.io/${{ github.repository }}:${{ steps.version.outputs.tag }}
