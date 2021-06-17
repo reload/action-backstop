@@ -19,7 +19,8 @@ inputs:
 
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/reload/action-backstop:main'
+  image: 'Dockerfile'
+#  image: 'docker://ghcr.io/reload/action-backstop:networkidle0'
   env:
     GITHUB_TOKEN: ${{ inputs.github_token }}
     BACKSTORE_KEY: ${{ inputs.backstore_key }}
