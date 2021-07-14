@@ -59,7 +59,7 @@ RUN apt-get -qqy update \
 
 # Use backstopjs@${BACKSTOPJS_VERSION} to get a specific version.
 # hadolint ignore=DL3016
-RUN npm install -g --unsafe-perm=true --allow-root backstopjs
+RUN npm install -g --unsafe-perm=true --allow-root git://github.com/rasben/backstopjs.git
 
 COPY entrypoint.sh /usr/bin/entrypoint.sh
 RUN chmod a+x /usr/bin/entrypoint.sh
