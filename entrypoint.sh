@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-STATE=error
+STATE=failure
 GITHUB_API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/statuses/${HEAD_SHA}"
 
 if backstop $1; then
