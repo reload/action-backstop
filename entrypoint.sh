@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+sleep 10
+
 STATE=failure
 GITHUB_API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/statuses/${HEAD_SHA}"
 
