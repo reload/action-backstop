@@ -7,7 +7,7 @@ GITHUB_API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/statuses/${HEA
 
 if [ "$1" == "reference" ]; then
     STATUS_DATA="{\"state\": \"pending\", \"description\": \"Report\", \"context\": \"Visual regression test\"}"
-    curl --fail --silent -X POST --user ":${GITHUB_TOKEN}" "${GITHUB_API_URL}" --data "${STATUS_DATA}"
+    curl --fail -X POST --user ":${GITHUB_TOKEN}" "${GITHUB_API_URL}" --data "${STATUS_DATA}"
 fi
 
 if backstop $1; then
