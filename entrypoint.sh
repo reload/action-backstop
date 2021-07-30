@@ -3,9 +3,15 @@
 set -euo pipefail
 
 STATE=error
+GITHUB_API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/statuses/${HEAD_SHA}"
 
 if backstop $1; then
   STATE=success
+fi
+
+if [ "$1" == "reference"]; then
+    STATUS_DATA="{\"state\": \"pending\", \"description\": \"Report\", \"context\": \"Visual regression test\", \"target_url\": \"${BACKSTORE_URL}\"}"
+    curl --fail --silent -X POST --user ":${GITHUB_TOKEN}" "${GITHUB_API_URL}" --data "${STATUS_DATA}"
 fi
 
 if [ "$1" == "test" ]; then
@@ -21,7 +27,6 @@ if [ "$1" == "test" ]; then
 
     BACKSTORE_URL=https://backstore.reload.dk/${SHA}/$(basename $HTML_REPORT)
 
-    GITHUB_API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/statuses/${HEAD_SHA}"
     STATUS_DATA="{\"state\": \"${STATE}\", \"description\": \"Report\", \"context\": \"Visual regression test\", \"target_url\": \"${BACKSTORE_URL}\"}"
     curl --fail --silent -X POST --user ":${GITHUB_TOKEN}" "${GITHUB_API_URL}" --data "${STATUS_DATA}"
 fi
