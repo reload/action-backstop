@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+npm install -g  backstopjs
+
 STATE=failure
 GITHUB_API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/statuses/${HEAD_SHA}"
 

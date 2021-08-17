@@ -18,14 +18,14 @@ inputs:
     default: ${{ github.event.pull_request.head.sha }}
 
 runs:
-  using: 'docker'
-  image: 'docker://ghcr.io/reload/action-backstop:main'
-  env:
-    GITHUB_TOKEN: ${{ inputs.github_token }}
-    BACKSTORE_KEY: ${{ inputs.backstore_key }}
-    HEAD_SHA: ${{ inputs.sha }}
-  args:
-    - ${{ inputs.action }}
+  using: 'composite'
+  steps:
+    - run: $GITHUB_ACTION_PATH/entrypoint.sh ${{ inputs.action }}
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+        BACKSTORE_KEY: ${{ inputs.backstore_key }}
+        HEAD_SHA: ${{ inputs.sha }}
 
 branding:
   icon: 'eye'
