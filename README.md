@@ -22,16 +22,18 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - uses: reload/action-backstop@main
+    - uses: reload/action-backstop@v2
       with:
         action: reference
+        github_token: ${{ github.token }}
+
     - uses: xendk/dais@main
       with:
         platform_id: ${{ secrets.DAIS_PLATFORMSH_ID }}
         platform_key: ${{ secrets.DAIS_PLATFORMSH_KEY }}
         files: backstop.json
 
-    - uses: reload/action-backstop@main
+    - uses: reload/action-backstop@v2
       with:
         github_token: ${{ github.token }}
         backstore_key: ${{ secrets.RELOAD_BACKSTORE_KEY }}
