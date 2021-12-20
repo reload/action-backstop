@@ -1,7 +1,7 @@
 on:
   workflow_run:
     workflows: ["Lint"]
-    branches: [main]
+    branches: [v2]
     types:
       - completed
 
@@ -24,7 +24,7 @@ jobs:
       id: buildx
       uses: docker/setup-buildx-action@master
     - name: Login to GitHub Container Registry
-      if: github.ref == 'refs/heads/main'
+      if: github.ref == 'refs/heads/v2'
       uses: docker/login-action@v1
       with:
         registry: ghcr.io
@@ -33,7 +33,7 @@ jobs:
         # this is one from reload-deploy.
         password: ${{ secrets.GHCR_TOKEN }}
     - name: Build and push Docker images
-      if: github.ref == 'refs/heads/main'
+      if: github.ref == 'refs/heads/v2'
       uses: docker/build-push-action@v2
       with:
         builder: ${{ steps.buildx.outputs.name }}
@@ -42,9 +42,6 @@ jobs:
           org.opencontainers.image.source=https://github.com/${{ github.repository }}
           org.opencontainers.image.version=${{ steps.version.outputs.tag }}
           org.opencontainers.image.revision=${{ github.sha }}
-        # Currently we only have the main branch, so just hardcode
-        # that tag. If we create a `v1` branch, we need to get the
-        # branch name and update `branches` at the top of this file.
         tags: |
-          ghcr.io/${{ github.repository }}:main
+          ghcr.io/${{ github.repository }}:v2
           ghcr.io/${{ github.repository }}:${{ steps.version.outputs.tag }}
